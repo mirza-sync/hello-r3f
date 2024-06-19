@@ -1,13 +1,22 @@
-import { Canvas, ThreeElements } from '@react-three/fiber'
+import { Canvas, ThreeElements, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { Mesh, TextureLoader } from 'three'
+import earthTexture from "./assets/earthmap1k.jpg";
+import { useRef } from 'react';
 
 function Earth(props: ThreeElements['mesh']) {
+  const meshRef = useRef<Mesh>(null!)
+  const earthMap = useLoader(TextureLoader, earthTexture)
+
+  useFrame((_) => meshRef.current.rotation.y += 0.001)
+
   return (
     <mesh
       {...props}
+      ref={meshRef}
     >
       <icosahedronGeometry args={[1, 12]} />
-      <meshStandardMaterial color={'lightblue'} />
+      <meshStandardMaterial map={earthMap} />
     </mesh>
   )
 }
