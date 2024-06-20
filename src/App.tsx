@@ -11,13 +11,15 @@ function Earth(props: ThreeElements['mesh']) {
   useFrame((_) => meshRef.current.rotation.y += 0.001)
 
   return (
-    <mesh
-      {...props}
-      ref={meshRef}
-    >
-      <icosahedronGeometry args={[1, 12]} />
-      <meshStandardMaterial map={earthMap} />
-    </mesh>
+    <group rotation={[0, 0, (-23.4 * Math.PI / 180)]}>
+      <mesh
+        {...props}
+        ref={meshRef}
+      >
+        <icosahedronGeometry args={[1, 12]} />
+        <meshStandardMaterial map={earthMap} />
+      </mesh>
+    </group>
   )
 }
 
