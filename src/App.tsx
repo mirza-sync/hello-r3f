@@ -28,7 +28,7 @@ function App() {
     <>
       <Canvas>
         <OrbitControls />
-        <hemisphereLight args={['#ffffff', '#000000', 0.5]} />
+        <directionalLight position={[-2, 0.5, 1.5]} />
         <Earth position={[0, 0, 0]} />
       </Canvas>
     </>
