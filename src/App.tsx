@@ -27,15 +27,15 @@ function Earth(props: ThreeElements['mesh']) {
         {...props}
         ref={earthMeshRef}
       >
-        <meshStandardMaterial map={earthMap} />
         <Sphere />
+        <meshStandardMaterial map={earthMap} />
       </mesh>
       <mesh
         {...props}
         ref={lightsMeshRef}
       >
-        <meshBasicMaterial map={lightsMat} blending={THREE.AdditiveBlending} />
         <Sphere />
+        <meshBasicMaterial map={lightsMat} blending={THREE.AdditiveBlending} />
       </mesh>
     </group>
   )
@@ -49,7 +49,7 @@ function SunLight() {
     <>
       <directionalLight
         args={[0xffffff, 1]}
-        position={[-2, 0, 0]}
+        position={[-2, 0.5, 1.5]}
         // ref={dirLightRef}
       />
     </>
