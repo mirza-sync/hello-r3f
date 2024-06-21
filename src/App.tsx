@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { Canvas, ThreeElements, useFrame, useLoader } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, useHelper } from '@react-three/drei'
 import { Mesh, TextureLoader } from 'three'
 import earthTexture from "./assets/earthmap1k.jpg";
 import earthLights from "./assets/earthlights1k.jpg";
@@ -27,12 +27,27 @@ function Earth(props: ThreeElements['mesh']) {
   )
 }
 
+function SunLight() {
+  const dirLightRef = useRef<THREE.DirectionalLight>(null!)
+  useHelper(dirLightRef, THREE.DirectionalLightHelper)
+
+  return (
+    <>
+      <directionalLight
+        args={[0xffffff, 1]}
+        position={[-2, 0, 0]}
+        // ref={dirLightRef}
+      />
+    </>
+  )
+}
+
 function App() {
   return (
     <>
       <Canvas>
         <OrbitControls />
-        <directionalLight position={[-2, 0.5, 1.5]} />
+        <SunLight />
         <Earth position={[0, 0, 0]} />
       </Canvas>
     </>
