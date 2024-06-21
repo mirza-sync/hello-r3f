@@ -6,22 +6,36 @@ import earthTexture from "./assets/earthmap1k.jpg";
 import earthLights from "./assets/earthlights1k.jpg";
 import { useRef } from 'react';
 
+function Sphere() {
+  return <icosahedronGeometry args={[1, 12]} />
+}
+
 function Earth(props: ThreeElements['mesh']) {
-  const meshRef = useRef<Mesh>(null!)
+  const earthMeshRef = useRef<Mesh>(null!)
+  const lightsMeshRef = useRef<Mesh>(null!)
   const earthMap = useLoader(TextureLoader, earthTexture)
   const lightsMat = useLoader(TextureLoader, earthLights)
 
-  useFrame((_) => meshRef.current.rotation.y += 0.001)
+  useFrame((_) => {
+    earthMeshRef.current.rotation.y += 0.001
+    lightsMeshRef.current.rotation.y += 0.001
+  })
 
   return (
     <group rotation={[0, 0, (-23.4 * Math.PI / 180)]}>
       <mesh
         {...props}
-        ref={meshRef}
+        ref={earthMeshRef}
       >
-        <icosahedronGeometry args={[1, 12]} />
         <meshStandardMaterial map={earthMap} />
+        <Sphere />
+      </mesh>
+      <mesh
+        {...props}
+        ref={lightsMeshRef}
+      >
         <meshBasicMaterial map={lightsMat} blending={THREE.AdditiveBlending} />
+        <Sphere />
       </mesh>
     </group>
   )
