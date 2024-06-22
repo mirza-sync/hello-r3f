@@ -1,15 +1,29 @@
 import * as THREE from 'three'
-import { Canvas, ThreeElements, useFrame, useLoader } from '@react-three/fiber'
+import { Canvas, MeshProps, ThreeElements, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls, useHelper } from '@react-three/drei'
 import { Mesh, TextureLoader } from 'three'
 import earthTexture from "./assets/earthmap1k.jpg";
 import earthLights from "./assets/earthlights1k.jpg";
 import cloudsTexture from "./assets/earthcloudmap.jpg";
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
 function Sphere() {
   return <icosahedronGeometry args={[1, 12]} />
 }
+
+const SphereMesh = React.forwardRef((
+  props: MeshProps,
+  ref: React.Ref<Mesh>,
+) => {
+  return (
+    <mesh
+      {...props}
+      ref={ref}
+    >
+      {props.children}
+    </mesh>
+  )
+})
 
 function Earth(props: ThreeElements['mesh']) {
   const earthMeshRef = useRef<Mesh>(null!)
@@ -27,28 +41,28 @@ function Earth(props: ThreeElements['mesh']) {
 
   return (
     <group rotation={[0, 0, (-23.4 * Math.PI / 180)]}>
-      <mesh
+      <SphereMesh
         {...props}
         ref={earthMeshRef}
       >
         <Sphere />
         <meshStandardMaterial map={earthMap} />
-      </mesh>
-      <mesh
+      </SphereMesh>
+      <SphereMesh
         {...props}
         ref={lightsMeshRef}
       >
         <Sphere />
         <meshBasicMaterial map={lightsMat} blending={THREE.AdditiveBlending} />
-      </mesh>
-      <mesh
+      </SphereMesh>
+      <SphereMesh
         {...props}
         ref={cloudsMeshRef}
         scale={1.002}
       >
         <Sphere />
         <meshStandardMaterial map={cloudsMat} blending={THREE.AdditiveBlending} transparent opacity={0.8} />
-      </mesh>
+      </SphereMesh>
     </group>
   )
 }
@@ -62,7 +76,7 @@ function SunLight() {
       <directionalLight
         args={[0xffffff, 1]}
         position={[-2, 0.5, 1.5]}
-        // ref={dirLightRef}
+      // ref={dirLightRef}
       />
     </>
   )
