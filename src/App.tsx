@@ -6,7 +6,7 @@ import earthTexture from "./assets/earthmap1k.jpg";
 import earthLights from "./assets/earthlights1k.jpg";
 import cloudsTexture from "./assets/earthcloudmap.jpg";
 import React, { useRef } from 'react';
-import { getFresnelMat } from './getFresnelMat';
+import { getFresnelMat } from './utils/getFresnelMat';
 
 function Sphere() {
   return <icosahedronGeometry args={[1, 12]} />
