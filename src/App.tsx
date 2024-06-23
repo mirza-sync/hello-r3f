@@ -6,6 +6,7 @@ import earthTexture from "./assets/earthmap1k.jpg";
 import earthLights from "./assets/earthlights1k.jpg";
 import cloudsTexture from "./assets/earthcloudmap.jpg";
 import React, { useRef } from 'react';
+import { getFresnelMat } from './getFresnelMat';
 
 function Sphere() {
   return <icosahedronGeometry args={[1, 12]} />
@@ -25,10 +26,15 @@ const SphereMesh = React.forwardRef((
   )
 })
 
+function GlowMat() {
+  return getFresnelMat()
+}
+
 function Earth(props: ThreeElements['mesh']) {
   const earthMeshRef = useRef<Mesh>(null!)
   const lightsMeshRef = useRef<Mesh>(null!)
   const cloudsMeshRef = useRef<Mesh>(null!)
+  const glowMeshRef = useRef<Mesh>(null!)
   const earthMap = useLoader(TextureLoader, earthTexture)
   const lightsMat = useLoader(TextureLoader, earthLights)
   const cloudsMat = useLoader(TextureLoader, cloudsTexture)
@@ -36,7 +42,8 @@ function Earth(props: ThreeElements['mesh']) {
   useFrame((_) => {
     earthMeshRef.current.rotation.y += 0.001
     lightsMeshRef.current.rotation.y += 0.001
-    cloudsMeshRef.current.rotation.y += 0.001
+    cloudsMeshRef.current.rotation.y += 0.002
+    glowMeshRef.current.rotation.y += 0.001
   })
 
   return (
@@ -62,6 +69,14 @@ function Earth(props: ThreeElements['mesh']) {
       >
         <Sphere />
         <meshStandardMaterial map={cloudsMat} blending={THREE.AdditiveBlending} transparent opacity={0.8} />
+      </SphereMesh>
+      <SphereMesh
+        {...props}
+        ref={glowMeshRef}
+        scale={1.01}
+      >
+        <Sphere />
+        <GlowMat />
       </SphereMesh>
     </group>
   )
