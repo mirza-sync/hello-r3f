@@ -3,8 +3,11 @@ import { Canvas, MeshProps, ThreeElements, useFrame, useLoader } from '@react-th
 import { OrbitControls, useHelper } from '@react-three/drei'
 import { Mesh, TextureLoader } from 'three'
 import earthTexture from "./assets/earthmap1k.jpg";
+import earthSpecTexture from "./assets/earthspec1k.jpg";
+import earthBumpTexture from "./assets/earthbump1k.jpg";
 import earthLights from "./assets/earthlights1k.jpg";
 import cloudsTexture from "./assets/earthcloudmap.jpg";
+import cloudsAlphaTexture from "./assets/earthcloudmaptrans.jpg";
 import React, { useRef } from 'react';
 import { getFresnelMat } from './utils/getFresnelMat';
 import getStarfield from './utils/getStarField';
@@ -37,13 +40,16 @@ function Earth(props: ThreeElements['mesh']) {
   const cloudsMeshRef = useRef<Mesh>(null!)
   const glowMeshRef = useRef<Mesh>(null!)
   const earthMap = useLoader(TextureLoader, earthTexture)
+  const earthSpecMap = useLoader(TextureLoader, earthSpecTexture)
+  const earthBumpMap = useLoader(TextureLoader, earthBumpTexture)
   const lightsMat = useLoader(TextureLoader, earthLights)
   const cloudsMat = useLoader(TextureLoader, cloudsTexture)
+  const cloudsAlphaMat = useLoader(TextureLoader, cloudsAlphaTexture)
 
   useFrame((_) => {
     earthMeshRef.current.rotation.y += 0.001
     lightsMeshRef.current.rotation.y += 0.001
-    cloudsMeshRef.current.rotation.y += 0.002
+    cloudsMeshRef.current.rotation.y += 0.0013
     glowMeshRef.current.rotation.y += 0.001
   })
 
@@ -54,7 +60,12 @@ function Earth(props: ThreeElements['mesh']) {
         ref={earthMeshRef}
       >
         <Sphere />
-        <meshStandardMaterial map={earthMap} />
+        <meshPhongMaterial
+          map={earthMap}
+          specularMap={earthSpecMap}
+          bumpMap={earthBumpMap}
+          bumpScale={0.04}
+        />
       </SphereMesh>
       <SphereMesh
         {...props}
@@ -66,10 +77,16 @@ function Earth(props: ThreeElements['mesh']) {
       <SphereMesh
         {...props}
         ref={cloudsMeshRef}
-        scale={1.002}
+        scale={1.003}
       >
         <Sphere />
-        <meshStandardMaterial map={cloudsMat} blending={THREE.AdditiveBlending} transparent opacity={0.8} />
+        <meshStandardMaterial
+          map={cloudsMat}
+          transparent
+          opacity={0.8}
+          blending={THREE.AdditiveBlending}
+          // alphaMap={cloudsAlphaMat}
+        />
       </SphereMesh>
       <SphereMesh
         {...props}
