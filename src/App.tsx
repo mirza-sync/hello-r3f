@@ -7,6 +7,7 @@ import earthLights from "./assets/earthlights1k.jpg";
 import cloudsTexture from "./assets/earthcloudmap.jpg";
 import React, { useRef } from 'react';
 import { getFresnelMat } from './utils/getFresnelMat';
+import getStarfield from './utils/getStarField';
 
 function Sphere() {
   return <icosahedronGeometry args={[1, 12]} />
@@ -89,7 +90,7 @@ function SunLight() {
   return (
     <>
       <directionalLight
-        args={[0xffffff, 1]}
+        args={[0xffffff, 2]}
         position={[-2, 0.5, 1.5]}
       // ref={dirLightRef}
       />
@@ -104,6 +105,7 @@ function App() {
         <OrbitControls />
         <SunLight />
         <Earth position={[0, 0, 0]} />
+        {getStarfield({ numStars: 5000 })}
       </Canvas>
     </>
   )
